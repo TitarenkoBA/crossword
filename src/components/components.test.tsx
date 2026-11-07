@@ -88,6 +88,15 @@ describe('ScreenKeyboard', () => {
     expect(handlers.onNext).toHaveBeenCalled();
   });
 
+  it('компактный режим: управляющие клавиши отдельными рядами', () => {
+    renderWithApp(
+      <ScreenKeyboard onLetter={vi.fn()} onErase={vi.fn()} onPrev={vi.fn()} onNext={vi.fn()} onToggleDirection={vi.fn()} canToggle compact />,
+    );
+    const rows = screen.getByRole('group', { name: 'Экранная клавиатура' }).children;
+    expect(rows).toHaveLength(5);
+    expect(rows[4]).toHaveTextContent('Стереть');
+  });
+
   it('«Повернуть» недоступна, если в клетке одно слово', () => {
     renderWithApp(
       <ScreenKeyboard onLetter={vi.fn()} onErase={vi.fn()} onPrev={vi.fn()} onNext={vi.fn()} onToggleDirection={vi.fn()} canToggle={false} />,
@@ -128,7 +137,7 @@ describe('CrosswordGrid', () => {
 
 describe('CluePanel', () => {
   it('показывает вопрос, подсказку и вызывает действия', () => {
-    const on = { onHint: vi.fn(), onRevealLetter: vi.fn(), onPrevWord: vi.fn(), onNextWord: vi.fn() };
+    const on = { onHint: vi.fn(), onRevealLetter: vi.fn(), onPrevWord: vi.fn(), onNextWord: vi.fn(), onCheckWord: vi.fn(), onCheckAll: vi.fn() };
     const first = renderWithApp(<CluePanel grid={grid} state={play()} {...on} />);
     expect(screen.getByTestId('current-clue')).toHaveTextContent('Мурлыка');
     expect(screen.getByText(/1 по горизонтали · 3 буквы/)).toBeInTheDocument();
@@ -136,6 +145,10 @@ describe('CluePanel', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Открыть букву' }));
     fireEvent.click(screen.getByRole('button', { name: /Пред. слово/ }));
     fireEvent.click(screen.getByRole('button', { name: /След. слово/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Проверить слово' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Проверить всё' }));
+    expect(on.onCheckWord).toHaveBeenCalled();
+    expect(on.onCheckAll).toHaveBeenCalled();
     expect(on.onHint).toHaveBeenCalled();
     expect(on.onRevealLetter).toHaveBeenCalled();
     expect(on.onPrevWord).toHaveBeenCalled();

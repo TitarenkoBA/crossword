@@ -2,6 +2,9 @@
 // Tailwind v3 (не v4!) — v4 требует Chrome 111+. См. docs/COMPATIBILITY.md.
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
+  // Tailwind создаёт утилиту для любого похожего слова в коде (например, role="grid"
+  // или .filter(...)). Эти утилиты не работают в Chrome 49 — запрещаем их.
+  blocklist: ['grid', '!grid', 'inline-grid', 'filter', '!filter', 'backdrop-filter'],
   theme: {
     fontFamily: {
       sans: ['Verdana', 'Tahoma', '"Segoe UI"', 'Arial', 'sans-serif'],
@@ -58,6 +61,17 @@ export default {
     gridAutoRows: false,
     aspectRatio: false,
     backdropFilter: false,
+    // filter-утилиты ссылаются на пустые CSS-переменные — в Chrome 49 не работают.
+    filter: false,
+    blur: false,
+    brightness: false,
+    contrast: false,
+    dropShadow: false,
+    grayscale: false,
+    hueRotate: false,
+    invert: false,
+    saturate: false,
+    sepia: false,
     backdropBlur: false,
   },
   plugins: [],

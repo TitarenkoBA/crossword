@@ -31,6 +31,8 @@ export interface ButtonProps {
   block?: boolean;
   /** Крупнее обычного (для главных действий). */
   large?: boolean;
+  /** Помельче обычного (для плотных панелей); высота всё равно не меньше 3rem. */
+  small?: boolean;
   className?: string;
   ariaLabel?: string;
   ariaPressed?: boolean;
@@ -45,6 +47,7 @@ export function Button({
   disabled,
   block,
   large,
+  small,
   className = '',
   ariaLabel,
   ariaPressed,
@@ -56,9 +59,9 @@ export function Button({
     <button
       type="button"
       className={
-        'inline-flex items-center justify-center min-h-target min-w-target px-4 py-2 rounded-lg border-2 ' +
+        'inline-flex items-center justify-center min-h-target min-w-target py-2 rounded-lg border-2 ' +
         'font-bold text-center leading-tight ' +
-        (large ? 'text-xl py-3 ' : 'text-lg ') +
+        (large ? 'text-xl py-3 px-4 ' : small ? 'text-base px-2 ' : 'text-lg px-4 ') +
         (block ? 'w-full ' : '') +
         (disabled ? 'opacity-50 ' : '') +
         VARIANTS[variant] +

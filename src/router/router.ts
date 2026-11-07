@@ -59,3 +59,9 @@ export function useRoute(): Route {
   }, []);
   return route;
 }
+
+/** «Назад»: на предыдущую страницу, а если её нет (открыли по ссылке) — на главную. */
+export function goBack(): void {
+  if (window.history.length > 1) window.history.back();
+  else navigate({ name: 'home' });
+}

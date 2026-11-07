@@ -69,12 +69,13 @@ function stripQuery(url) {
   return i === -1 ? url : url.slice(0, i);
 }
 
-function cacheFirst(cacheName, request) {
+// key — адрес без ?v=…; запрос в сеть идёт с исходным адресом (минуя HTTP-кеш старой версии).
+function cacheFirst(cacheName, key, request) {
   return caches.open(cacheName).then(function (cache) {
-    return cache.match(request).then(function (hit) {
+    return cache.match(key).then(function (hit) {
       if (hit) return hit;
       return fetch(request).then(function (response) {
-        if (response && response.ok) cache.put(request, response.clone());
+        if (response && response.ok) cache.put(key, response.clone());
         return response;
       });
     });
@@ -99,7 +100,7 @@ self.addEventListener('fetch', function (event) {
 
   // data/index.json входит в оболочку; пачки кроссвордов кешируются по запросу.
   if (url.indexOf(scope + 'data/') === 0 && url !== scope + 'data/index.json') {
-    event.respondWith(cacheFirst(DATA_CACHE, url));
+    event.respondWith(cacheFirst(DATA_CACHE, url, request));
     return;
   }
 
