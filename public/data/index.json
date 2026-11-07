@@ -1,0 +1,18 @@
+{
+  "version": "8c3bd775a661",
+  "chunkSize": 50,
+  "levels": {
+    "easy": {
+      "count": 350,
+      "chunks": 7
+    },
+    "medium": {
+      "count": 350,
+      "chunks": 7
+    },
+    "hard": {
+      "count": 300,
+      "chunks": 6
+    }
+  }
+}

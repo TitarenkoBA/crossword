@@ -4,13 +4,19 @@
 import { readFileSync, readdirSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
-import { mergeDictionaries, parseDictionary, type ParseResult } from '../src/core/dictionary.ts';
+import { mergeDictionaries, parseDictionary, type DictEntry, type ParseResult } from '../src/core/dictionary.ts';
+import { LEVELS, generateLevel, type Usage } from '../src/core/generator.ts';
+import { createRng, seedFrom } from '../src/core/random.ts';
+import { validatePuzzle } from '../src/core/validate.ts';
 import { DIFFICULTIES, type Difficulty, type Puzzle } from '../src/core/types.ts';
 import { CHUNK_SIZE, chunkPath, type DataIndex, type PuzzleChunk } from '../src/data/format.ts';
 
 export const ROOT = join(import.meta.dirname, '..');
 export const DICTIONARY_DIR = join(ROOT, 'data-src', 'dictionary');
 export const DATA_DIR = join(ROOT, 'public', 'data');
+
+/** Меняйте, чтобы получить совсем другой набор кроссвордов из того же словаря. */
+export const SEED_PREFIX = 'crossword-v1';
 
 /** Читает все data-src/dictionary/*.txt. Имя файла без расширения — тема. */
 export function loadDictionary(dir = DICTIONARY_DIR): ParseResult {
@@ -57,4 +63,22 @@ export function readDataset(dir = DATA_DIR): { index: DataIndex; byLevel: Record
     }
   }
   return { index, byLevel };
+}
+
+/** Генерирует все уровни. Бросает ошибку, если какой-то кроссворд не прошёл проверку. */
+export function generateAll(entries: DictEntry[]): {
+  byLevel: Record<Difficulty, Puzzle[]>;
+  usage: Record<Difficulty, Usage>;
+} {
+  const byLevel = {} as Record<Difficulty, Puzzle[]>;
+  const usage = {} as Record<Difficulty, Usage>;
+  for (const level of DIFFICULTIES) {
+    const cfg = LEVELS[level];
+    const result = generateLevel(entries, cfg, createRng(seedFrom(`${SEED_PREFIX}-${level}`)));
+    const errors = result.puzzles.flatMap((p) => validatePuzzle(p, cfg));
+    if (errors.length) throw new Error(`Сгенерированы некорректные кроссворды:\n  ${errors.slice(0, 20).join('\n  ')}`);
+    byLevel[level] = result.puzzles;
+    usage[level] = result.usage;
+  }
+  return { byLevel, usage };
 }
