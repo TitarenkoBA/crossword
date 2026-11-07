@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import legacy from '@vitejs/plugin-legacy';
+import { es5LegacyChunks } from './build/es5-legacy-chunks.ts';
+import { serviceWorker } from './build/service-worker.ts';
 import pkg from './package.json' with { type: 'json' };
 
 // Подробности о совместимости со старыми браузерами — docs/COMPATIBILITY.md.
@@ -15,11 +17,15 @@ export default defineConfig({
       targets: pkg.browserslist,
       modernPolyfills: true,
     }),
+    es5LegacyChunks(),
+    // Генерирует dist/sw.js (офлайн-режим). См. build/sw-template.js.
+    serviceWorker(),
   ],
   build: {
     // Минификатор CSS не должен превращать top/right/bottom/left в `inset`
     // и использовать другой синтаксис, неизвестный Chrome 49.
     cssTarget: ['chrome49'],
     sourcemap: false,
+    minify: 'terser',
   },
 });
