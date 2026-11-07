@@ -134,7 +134,8 @@ function Game({ puzzle }: { puzzle: Puzzle }) {
   const wide = vp.width >= rem * 45 && vp.height >= rem * 34;
   const gridBox = useRef<HTMLDivElement>(null);
   const box = useElementSize(gridBox, [wide, settings.scale, settings.showKeyboard, finished]);
-  const availHeight = wide ? box.height : Math.round(vp.height * 0.6);
+  // В узкой раскладке страница прокручивается, так что сетка может занять всю высоту окна.
+  const availHeight = wide ? box.height : vp.height - 24;
   const cellSize = box.width ? fitCellSize(grid, box.width - 4, availHeight - 4) : 32;
 
   const act = useCallback((a: GameAction) => dispatch(a), [dispatch]);
