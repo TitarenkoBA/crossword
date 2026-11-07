@@ -7,7 +7,9 @@ export default {
   blocklist: ['grid', '!grid', 'inline-grid', 'filter', '!filter', 'backdrop-filter'],
   theme: {
     fontFamily: {
-      sans: ['Verdana', 'Tahoma', '"Segoe UI"', 'Arial', 'sans-serif'],
+      // Системный шрифт; на Windows XP — Arial (с кириллицей). При включённых
+      // специальных возможностях подключается Verdana (см. src/styles/index.css).
+      sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
     },
     extend: {
       // Цвета задаются CSS-переменными (src/styles/index.css), чтобы темы
@@ -15,9 +17,15 @@ export default {
       colors: {
         bg: 'var(--c-bg)',
         surface: 'var(--c-surface)',
+        'surface-2': 'var(--c-surface-2)',
+        soft: 'var(--c-soft)',
+        'on-soft': 'var(--c-on-soft)',
+        'ok-soft': 'var(--c-ok-soft)',
+        // Тонкие линии и рамки карточек; line-strong — рамки клеток и полей.
+        'line-strong': 'var(--c-border)',
         text: 'var(--c-text)',
         muted: 'var(--c-muted)',
-        line: 'var(--c-border)',
+        line: 'var(--c-line)',
         primary: 'var(--c-primary)',
         'on-primary': 'var(--c-on-primary)',
         secondary: 'var(--c-secondary)',

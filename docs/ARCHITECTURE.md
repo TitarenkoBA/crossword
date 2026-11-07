@@ -80,7 +80,9 @@
 
 ### Поменять цвета или темы
 
-Все цвета — CSS-переменные в `src/styles/index.css` (`.theme-light`, `.theme-dark`, `.theme-contrast`).
+Все цвета и тени — CSS-переменные в `src/styles/index.css` (`.theme-light`, `.theme-dark`, `.theme-contrast`).
+Карточки — класс `card`, кнопки — компонент `Button` (варианты `primary`, `secondary`, `soft`, `ghost`, `danger`).
+Тема `contrast` включается только вместе со спецвозможностями: см. `effectiveTheme` в `src/state/settings.ts`.
 Tailwind ссылается на них (`tailwind.config.js` → `colors`). Проверяйте контраст: текст не ниже 7:1.
 
 ### Добавить уровень сложности или поменять количество кроссвордов

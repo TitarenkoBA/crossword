@@ -8,8 +8,8 @@ export function UpdateBanner() {
   useEffect(() => onUpdateAvailable(setAvailable), []);
   if (!available) return null;
   return (
-    <div className="flex items-center justify-center flex-wrap bg-surface border-b-4 border-primary p-3" role="status">
-      <p className="text-xl font-bold mr-3 my-1">Доступна новая версия сайта.</p>
+    <div className="flex items-center justify-center flex-wrap bg-soft text-on-soft p-3" role="status">
+      <p className="text-base font-semibold mr-3 my-1">Доступна новая версия сайта.</p>
       <Button variant="primary" onClick={applyUpdate}>
         Обновить
       </Button>

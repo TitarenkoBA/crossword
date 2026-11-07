@@ -30,11 +30,11 @@ export function Overlay({ title, children, onClose, closeLabel = 'Закрыть
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className="w-full max-w-2xl bg-surface text-text border-4 border-line rounded-xl p-4 my-4"
+        className="card shadow-pop w-full max-w-2xl text-text rounded-3xl p-5 my-4"
       >
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-2xl font-bold mr-3">{title}</h2>
-          <Button onClick={onClose} variant="primary" guardKey="overlay-close">
+          <Button onClick={onClose} variant="soft" guardKey="overlay-close">
             × {closeLabel}
           </Button>
         </div>

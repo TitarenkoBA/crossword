@@ -2,6 +2,9 @@
  * Настройки. Каждый параметр — набор крупных кнопок-вариантов (без мелких
  * флажков и выпадающих списков, в которые трудно попасть мышью).
  * Изменения применяются и сохраняются сразу.
+ *
+ * Зрительные специальные возможности (крупный текст, высокий контраст) по умолчанию
+ * выключены и собраны под одним переключателем.
  */
 import { useState, type ReactNode } from 'react';
 import { Button } from '../components/Button.tsx';
@@ -22,21 +25,81 @@ import { clearAllProgress } from '../storage/storage.ts';
 
 function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
-    <section className="bg-surface border-2 border-line rounded-xl p-4 mb-4">
-      <h2 className="text-2xl font-bold">{title}</h2>
-      {hint && <p className="text-lg text-muted mt-1">{hint}</p>}
-      <div className="flex flex-wrap -m-1 mt-2">{children}</div>
+    <section className="card rounded-2xl p-5 mb-4">
+      <h2 className="text-xl font-bold">{title}</h2>
+      {hint && <p className="text-base text-muted mt-1">{hint}</p>}
+      <div className="mt-3">{children}</div>
     </section>
   );
 }
 
-function Choice({ selected, onClick, children, guardKey }: { selected: boolean; onClick: () => void; children: ReactNode; guardKey: string }) {
+/** Набор вариантов: выбранный — залитый и с точкой (не только цветом). */
+function Choices<T extends string | number>({
+  options,
+  value,
+  onChange,
+  name,
+}: {
+  options: { value: T; label: string }[];
+  value: T;
+  onChange: (v: T) => void;
+  name: string;
+}) {
   return (
-    <div className="w-1/2 sm:w-1/4 p-1">
-      <Button block variant={selected ? 'primary' : 'plain'} onClick={onClick} ariaPressed={selected} guardKey={guardKey}>
-        {selected ? '● ' : '○ '}
-        {children}
-      </Button>
+    <div className="flex flex-wrap -m-1">
+      {options.map((o) => {
+        const selected = o.value === value;
+        return (
+          <div key={String(o.value)} className="w-1/2 sm:w-1/4 p-1">
+            <Button
+              block
+              variant={selected ? 'primary' : 'secondary'}
+              onClick={() => onChange(o.value)}
+              ariaPressed={selected}
+              guardKey={name + '-' + o.value}
+            >
+              {selected ? '● ' : '○ '}
+              {o.label}
+            </Button>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Строка «название + пояснение» и переключатель Да / Нет. */
+function FlagRow({
+  title,
+  hint,
+  value,
+  onChange,
+  name,
+}: {
+  title: string;
+  hint?: string;
+  value: boolean;
+  onChange: (v: boolean) => void;
+  name: string;
+}) {
+  return (
+    <div className="flex flex-wrap items-center justify-between py-3 border-t border-line" data-setting={name}>
+      <div className="flex-1 mr-3 my-1" style={{ minWidth: '14rem' }}>
+        <h3 className="text-base font-semibold">{title}</h3>
+        {hint && <p className="text-sm text-muted">{hint}</p>}
+      </div>
+      <div className="flex my-1" style={{ width: '13rem' }}>
+        <div className="w-1/2 pr-1">
+          <Button block small variant={value ? 'primary' : 'secondary'} onClick={() => onChange(true)} ariaPressed={value} guardKey={name + '-on'}>
+            {value ? '● Да' : 'Да'}
+          </Button>
+        </div>
+        <div className="w-1/2 pl-1">
+          <Button block small variant={!value ? 'primary' : 'secondary'} onClick={() => onChange(false)} ariaPressed={!value} guardKey={name + '-off'}>
+            {!value ? '● Нет' : 'Нет'}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -70,74 +133,88 @@ export function SettingsScreen() {
   return (
     <div>
       <TopBar title="Настройки" backLabel="← Назад" onBack={goBack} />
-      <main className="max-w-4xl mx-auto px-3 py-4">
-        <Section title="Размер текста и кнопок">
-          {SCALE_LABELS.map((label, i) => (
-            <Choice key={label} selected={settings.scale === i} onClick={() => set('scale', i as Scale)} guardKey={'scale-' + i}>
-              {label}
-            </Choice>
-          ))}
-        </Section>
-
+      <main className="max-w-3xl mx-auto px-4 py-6">
         <Section title="Оформление">
-          {(Object.keys(THEME_LABELS) as Theme[]).map((t) => (
-            <Choice key={t} selected={settings.theme === t} onClick={() => set('theme', t)} guardKey={'theme-' + t}>
-              {THEME_LABELS[t]}
-            </Choice>
-          ))}
+          <Choices
+            name="theme"
+            value={settings.theme}
+            onChange={(t: Theme) => set('theme', t)}
+            options={(Object.keys(THEME_LABELS) as Theme[]).map((t) => ({ value: t, label: THEME_LABELS[t] }))}
+          />
         </Section>
 
-        {FLAGS.map((f) => (
-          <Section key={f.key} title={f.title} hint={f.hint}>
-            <Choice selected={settings[f.key]} onClick={() => set(f.key, true)} guardKey={f.key + '-on'}>
-              Да
-            </Choice>
-            <Choice selected={!settings[f.key]} onClick={() => set(f.key, false)} guardKey={f.key + '-off'}>
-              Нет
-            </Choice>
-          </Section>
-        ))}
+        <Section title="Специальные возможности для зрения" hint="Крупный текст и кнопки, высокий контраст, более разборчивый шрифт.">
+          <FlagRow name="visualAids" title="Включить" value={settings.visualAids} onChange={(v) => set('visualAids', v)} />
+          {settings.visualAids && (
+            <>
+              <div className="py-3 border-t border-line">
+                <h3 className="text-base font-semibold mb-2">Размер текста и кнопок</h3>
+                <Choices
+                  name="scale"
+                  value={settings.scale}
+                  onChange={(v: Scale) => set('scale', v)}
+                  options={SCALE_LABELS.map((label, i) => ({ value: i as Scale, label }))}
+                />
+              </div>
+              <FlagRow
+                name="highContrast"
+                title="Высокий контраст"
+                hint="Жёлтый текст на чёрном фоне, толстые рамки."
+                value={settings.highContrast}
+                onChange={(v) => set('highContrast', v)}
+              />
+            </>
+          )}
+        </Section>
 
-        {settings.tremorGuard && (
-          <Section title="Сколько ждать повторного нажатия" hint="Чем больше время, тем надёжнее защита, но медленнее ввод.">
-            {TREMOR_DELAYS.map((ms) => (
-              <Choice key={ms} selected={settings.tremorDelayMs === ms} onClick={() => set('tremorDelayMs', ms)} guardKey={'delay-' + ms}>
-                {ms / 1000} с
-              </Choice>
-            ))}
-          </Section>
-        )}
+        <Section title="Управление">
+          {FLAGS.map((f) => (
+            <FlagRow key={f.key} name={f.key} title={f.title} hint={f.hint} value={settings[f.key]} onChange={(v) => set(f.key, v)} />
+          ))}
+          {settings.tremorGuard && (
+            <div className="py-3 border-t border-line">
+              <h3 className="text-base font-semibold">Сколько ждать повторного нажатия</h3>
+              <p className="text-sm text-muted mb-2">Чем больше время, тем надёжнее защита, но медленнее ввод.</p>
+              <Choices
+                name="delay"
+                value={settings.tremorDelayMs}
+                onChange={(ms: number) => set('tremorDelayMs', ms)}
+                options={TREMOR_DELAYS.map((ms) => ({ value: ms, label: `${ms / 1000} с` }))}
+              />
+            </div>
+          )}
+        </Section>
 
         <Section title="Без интернета" hint="Скачать все кроссворды заранее (около 2 МБ), чтобы играть без подключения.">
-          <div className="w-full p-1">
-            <Button block onClick={startDownload} disabled={!!download && !download.error && download.done < download.total}>
-              Скачать все кроссворды
-            </Button>
-            {download && (
-              <p className="text-lg mt-2" role="status">
-                {download.error
-                  ? 'Не получилось скачать. Проверьте интернет и попробуйте ещё раз.'
-                  : download.total && download.done === download.total
-                    ? '√ Готово: все кроссворды сохранены.'
-                    : `Скачивание… ${download.done} из ${download.total || '?'}`}
-              </p>
-            )}
-          </div>
+          <Button block variant="soft" onClick={startDownload} disabled={!!download && !download.error && download.done < download.total}>
+            Скачать все кроссворды
+          </Button>
+          {download && (
+            <p className="text-base mt-2" role="status">
+              {download.error
+                ? 'Не получилось скачать. Проверьте интернет и попробуйте ещё раз.'
+                : download.total && download.done === download.total
+                  ? '√ Готово: все кроссворды сохранены.'
+                  : `Скачивание… ${download.done} из ${download.total || '?'}`}
+            </p>
+          )}
         </Section>
 
         <Section title="Сброс">
-          <div className="w-full sm:w-1/2 p-1">
-            <Button block onClick={() => updateSettings(DEFAULT_SETTINGS)}>
-              Вернуть настройки по умолчанию
-            </Button>
-          </div>
-          <div className="w-full sm:w-1/2 p-1">
-            <Button block variant="danger" onClick={() => setConfirm(1)}>
-              Удалить весь прогресс
-            </Button>
+          <div className="flex flex-wrap -m-1">
+            <div className="w-full sm:w-1/2 p-1">
+              <Button block onClick={() => updateSettings(DEFAULT_SETTINGS)}>
+                Вернуть настройки по умолчанию
+              </Button>
+            </div>
+            <div className="w-full sm:w-1/2 p-1">
+              <Button block variant="danger" onClick={() => setConfirm(1)}>
+                Удалить весь прогресс
+              </Button>
+            </div>
           </div>
           {cleared && (
-            <p className="w-full text-lg p-1" role="status">
+            <p className="text-base mt-2" role="status">
               Прогресс удалён.
             </p>
           )}

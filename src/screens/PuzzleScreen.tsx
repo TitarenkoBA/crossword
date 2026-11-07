@@ -2,7 +2,7 @@
  * Экран кроссворда — главный экран приложения.
  *
  * Раскладка:
- *  - широкий экран (от 45×34 rem, т.е. 900×680 px при «Крупном» тексте): слева сетка, справа текущий вопрос с кнопками,
+ *  - широкий экран (от 45×34 rem, т.е. 720×544 px при обычном тексте): слева сетка, справа текущий вопрос с кнопками,
  *    внизу на всю ширину — экранная клавиатура; на 1024×768 всё помещается
  *    без прокрутки;
  *  - узкий экран: вопрос, сетка и клавиатура друг под другом.
@@ -27,6 +27,7 @@ import type { Puzzle } from '../core/types.ts';
 import { navigate } from '../router/router.ts';
 import { useApp } from '../state/AppContext.tsx';
 import { formatTime, useGame } from '../state/useGame.ts';
+import { ROOT_FONT_PX, effectiveScale } from '../state/settings.ts';
 import { LEVEL_INFO } from './levels.ts';
 import { PAGE_SIZE } from './LevelScreen.tsx';
 
@@ -73,8 +74,6 @@ export function PuzzleScreen({ id }: { id: string }) {
 
 type Panel = 'none' | 'clues' | 'more';
 
-/** Размер шрифта <html> для каждого масштаба (см. src/styles/index.css). */
-const ROOT_FONT_PX = [16, 20, 24, 28];
 type Confirm = null | 'reveal' | 'reset';
 
 function Game({ puzzle }: { puzzle: Puzzle }) {
@@ -129,11 +128,12 @@ function Game({ puzzle }: { puzzle: Puzzle }) {
   // Раскладка и размер клеток.
   const vp = useViewport();
   // Широкая раскладка — только если окно достаточно большое для выбранного размера
-  // текста (45×34 rem: 900×680 px при «Крупном» размере). Иначе — всё друг под другом.
-  const rem = ROOT_FONT_PX[settings.scale];
+  // текста (45×34 rem: 720×544 px при обычном размере). Иначе — всё друг под другом.
+  const scale = effectiveScale(settings);
+  const rem = ROOT_FONT_PX[scale];
   const wide = vp.width >= rem * 45 && vp.height >= rem * 34;
   const gridBox = useRef<HTMLDivElement>(null);
-  const box = useElementSize(gridBox, [wide, settings.scale, settings.showKeyboard, finished]);
+  const box = useElementSize(gridBox, [wide, scale, settings.showKeyboard, finished]);
   // В узкой раскладке страница прокручивается, так что сетка может занять всю высоту окна.
   const availHeight = wide ? box.height : vp.height - 24;
   const cellSize = box.width ? fitCellSize(grid, box.width - 4, availHeight - 4) : 32;
@@ -167,15 +167,15 @@ function Game({ puzzle }: { puzzle: Puzzle }) {
   );
 
   const stats = (
-    <p className="text-lg">
+    <p className="text-base text-muted">
       Подсказок: {state.stats.hintsShown}, открыто букв: {state.stats.revealedLetters}, проверок: {state.stats.checks}
       {settings.showTimer ? `, время: ${formatTime(elapsedMs)}` : ''}.
     </p>
   );
 
   const finishedBanner = finished && (
-    <div className="bg-surface border-4 border-ok rounded-xl p-3 mb-3" role="status" data-testid="finished-banner">
-      <p className="text-2xl font-bold text-ok">{state.solved ? '√ Кроссворд решён!' : 'Показано решение'}</p>
+    <div className="bg-ok-soft border border-ok rounded-2xl p-4 mb-3" role="status" data-testid="finished-banner">
+      <p className="text-xl font-bold text-ok">{state.solved ? '√ Кроссворд решён!' : 'Показано решение'}</p>
       {stats}
       <div className="flex flex-wrap -m-1 mt-2">
         {nextId && (
@@ -216,13 +216,13 @@ function Game({ puzzle }: { puzzle: Puzzle }) {
       onBack={toList}
       right={
         <>
-          <Button onClick={() => setPanel('clues')} className="ml-2 my-1">
+          <Button variant="soft" onClick={() => setPanel('clues')} className="ml-2 my-1">
             Все вопросы
           </Button>
-          <Button onClick={() => setPanel('more')} className="ml-2 my-1">
+          <Button variant="soft" onClick={() => setPanel('more')} className="ml-2 my-1">
             Ещё…
           </Button>
-          <Button onClick={() => navigate({ name: 'settings' })} guardKey="open-settings" className="ml-2 my-1">
+          <Button variant="ghost" onClick={() => navigate({ name: 'settings' })} guardKey="open-settings" className="ml-2 my-1">
             Настройки
           </Button>
         </>

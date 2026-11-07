@@ -4,11 +4,11 @@ import { goBack } from '../router/router.ts';
 
 function Step({ n, title, children }: { n: number; title: string; children: ReactNode }) {
   return (
-    <section className="bg-surface border-2 border-line rounded-xl p-4 mb-4">
-      <h2 className="text-2xl font-bold">
+    <section className="card rounded-2xl p-5 mb-4">
+      <h2 className="text-xl font-bold">
         {n}. {title}
       </h2>
-      <div className="text-xl mt-2">{children}</div>
+      <div className="text-lg mt-2 text-text">{children}</div>
     </section>
   );
 }
@@ -18,7 +18,7 @@ function Cell({ kind, children }: { kind: 'active' | 'word' | 'plain'; children?
   const cls = kind === 'active' ? 'bg-cell-active text-cell-active-text' : kind === 'word' ? 'bg-cell-word text-cell-text' : 'bg-cell text-cell-text';
   return (
     <span
-      className={'inline-flex items-center justify-center font-bold border-line ' + cls}
+      className={'inline-flex items-center justify-center font-bold border-line-strong ' + cls}
       style={{ width: 44, height: 44, borderWidth: kind === 'active' ? 4 : kind === 'word' ? 3 : 1, borderStyle: 'solid', marginRight: -1, fontSize: 24 }}
     >
       {children}
@@ -62,8 +62,8 @@ export function HelpScreen() {
           <p>Время не ограничено. Всё сохраняется само: можно закрыть страницу и вернуться позже — кроссворд откроется с того же места.</p>
         </Step>
         <Step n={6} title="Удобство">
-          <p>В «Настройках» можно сделать текст и кнопки крупнее, включить высокий контраст и защиту от случайного двойного нажатия.</p>
-          <p className="mt-2">Если клетки кажутся маленькими, выберите размер текста «Очень крупный»: сетка станет больше, а страницу можно будет прокручивать кнопками или колёсиком.</p>
+          <p>В «Настройках» можно включить специальные возможности для зрения (крупный текст и кнопки, высокий контраст), тёмную тему и защиту от случайного двойного нажатия.</p>
+          <p className="mt-2">Если текст или клетки кажутся мелкими, включите «Специальные возможности для зрения» и выберите размер «Очень крупный»: сетка станет больше, а страницу можно будет прокручивать кнопками или колёсиком.</p>
         </Step>
       </main>
     </div>

@@ -41,13 +41,13 @@ export function ScrollBox({ children, height, label, watch }: ScrollBoxProps) {
 
   return (
     <div>
-      <Button block onClick={() => scroll(-1)} disabled={!canUp} guardKey={label + '-up'} className="mb-1">
+      <Button block small variant="soft" onClick={() => scroll(-1)} disabled={!canUp} guardKey={label + '-up'} className="mb-1">
         ▲ Выше
       </Button>
-      <div ref={box} className="overflow-y-auto border-2 border-line rounded-lg bg-surface" style={{ height }} onScroll={update} aria-label={label}>
+      <div ref={box} className="overflow-y-auto border border-line rounded-xl bg-surface" style={{ height }} onScroll={update} aria-label={label}>
         {children}
       </div>
-      <Button block onClick={() => scroll(1)} disabled={!canDown} guardKey={label + '-down'} className="mt-1">
+      <Button block small variant="soft" onClick={() => scroll(1)} disabled={!canDown} guardKey={label + '-down'} className="mt-1">
         ▼ Ниже
       </Button>
     </div>

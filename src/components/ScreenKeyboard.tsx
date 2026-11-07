@@ -42,8 +42,8 @@ function Key({ label, ariaLabel, guardKey, onPress, disabled, grow = 1, small }:
       disabled={disabled}
       aria-label={ariaLabel}
       className={
-        'kb-key min-h-target mx-px px-1 rounded-md border-2 border-line bg-surface text-text font-bold leading-tight ' +
-        (small ? 'text-base ' : 'text-xl ') +
+        'kb-key min-h-target mx-0.5 px-1 rounded-lg border leading-tight ' +
+        (small ? 'text-sm font-semibold bg-soft text-on-soft border-soft ' : 'text-xl font-semibold bg-surface text-text border-line ') +
         (disabled ? 'opacity-50' : '')
       }
       style={{ flexGrow: grow, flexShrink: 1, flexBasis: 0, minWidth: 0, overflow: 'hidden', wordWrap: 'break-word' }}
@@ -62,7 +62,7 @@ export function ScreenKeyboard({ onLetter, onErase, onPrev, onNext, onToggleDire
   const next = <Key label="Вперёд →" guardKey="next-cell" onPress={onNext} grow={1.5} small />;
   const erase = <Key label="Стереть" guardKey="erase" onPress={onErase} disabled={disabled} grow={2} small />;
   return (
-    <div className="select-none" role="group" aria-label="Экранная клавиатура">
+    <div className="select-none bg-surface-2 rounded-2xl p-1.5" role="group" aria-label="Экранная клавиатура">
       <div className="flex mb-1">{letters(KEYBOARD_ROWS[0])}</div>
       <div className="flex mb-1">
         {letters(KEYBOARD_ROWS[1])}

@@ -35,7 +35,7 @@ function Screens() {
     <>
       <UpdateBanner />
       {!store.isPersistent() && (
-        <p className="bg-surface border-b-4 border-error text-xl p-3 text-center" role="alert">
+        <p className="bg-surface border-b-2 border-error text-base p-3 text-center" role="alert">
           Внимание: браузер не разрешает сохранять данные, поэтому прогресс не запомнится после закрытия страницы.
         </p>
       )}

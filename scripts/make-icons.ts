@@ -2,16 +2,16 @@
  * Генерирует PNG-иконки приложения в public/icons/ без внешних зависимостей.
  * Запуск: `node scripts/make-icons.ts` (нужно только если хотите поменять рисунок).
  *
- * Рисунок: синий фон и фрагмент кроссворда — белые клетки, пересекающиеся крестом.
+ * Рисунок: индиго-фон и фрагмент кроссворда — белые клетки, пересекающиеся крестом.
  */
 import { deflateSync } from 'node:zlib';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const BLUE = [0x1a, 0x46, 0xc4];
+const BLUE = [0x4b, 0x45, 0xd6];
 const WHITE = [0xff, 0xff, 0xff];
-const DARK = [0x16, 0x16, 0x16];
-const YELLOW = [0xff, 0xcf, 0x33];
+const DARK = [0x1e, 0x23, 0x33];
+const YELLOW = [0xfc, 0xc9, 0x3a];
 
 // Сетка 5×5: 1 — белая клетка, 2 — выделенная (жёлтая), 0 — пусто.
 const PATTERN = [

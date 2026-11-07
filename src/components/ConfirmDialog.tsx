@@ -44,12 +44,12 @@ export function ConfirmDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialog-title"
-        className="w-full max-w-lg bg-surface text-text border-4 border-line rounded-xl p-6"
+        className="card shadow-pop w-full max-w-lg text-text rounded-3xl p-6"
       >
-        <h2 id="dialog-title" className="text-2xl font-bold mb-3">
+        <h2 id="dialog-title" className="text-2xl font-bold mb-2">
           {title}
         </h2>
-        {text && <p className="text-lg mb-6">{text}</p>}
+        {text && <p className="text-lg text-muted mb-6">{text}</p>}
         <div className="flex flex-wrap -m-2">
           <div className="flex-1 p-2" style={{ minWidth: '10rem' }} data-cancel>
             <Button block large onClick={onCancel} variant="primary" guardKey="dialog-cancel">

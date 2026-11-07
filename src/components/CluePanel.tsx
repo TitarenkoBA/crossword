@@ -24,26 +24,29 @@ export function CluePanel({ grid, state, onHint, onRevealLetter, onPrevWord, onN
   const finished = isFinished(state);
 
   return (
-    <section className="bg-surface border-2 border-line rounded-xl p-3" aria-live="polite" aria-label="Текущий вопрос">
-      <p className="text-base text-muted font-bold">
-        {wordLabel(word)} · {lettersCount(word.answer.length)}
-      </p>
-      <p className="text-xl font-bold mt-1" data-testid="current-clue">
+    <section className="card rounded-2xl p-4" aria-live="polite" aria-label="Текущий вопрос">
+      <div className="flex items-center justify-between flex-wrap">
+        <span className="inline-block bg-soft text-on-soft text-sm font-semibold rounded-full px-3 py-1 mr-2 mb-1">
+          {wordLabel(word)}
+        </span>
+        <span className="text-sm text-muted mb-1">{lettersCount(word.answer.length)}</span>
+      </div>
+      <p className="text-xl font-semibold mt-1 leading-snug" data-testid="current-clue">
         {word.clue}
       </p>
       {hintShown && (
-        <p className="text-lg mt-1 px-2 py-1 rounded-lg border-2 border-dashed border-line" data-testid="current-hint">
-          Подсказка: {word.hint}
+        <p className="text-base mt-2 px-3 py-2 rounded-xl bg-surface-2 text-text" data-testid="current-hint">
+          <span className="text-muted">Подсказка:</span> {word.hint}
         </p>
       )}
-      <div className="flex flex-wrap -m-1 mt-2">
+      <div className="flex flex-wrap -m-1 mt-3">
         <div className="w-1/2 p-1">
-          <Button block small onClick={onHint} disabled={hintShown}>
+          <Button block small variant="soft" onClick={onHint} disabled={hintShown}>
             Подсказка
           </Button>
         </div>
         <div className="w-1/2 p-1">
-          <Button block small onClick={onRevealLetter} disabled={finished}>
+          <Button block small variant="soft" onClick={onRevealLetter} disabled={finished}>
             Открыть букву
           </Button>
         </div>

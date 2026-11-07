@@ -173,11 +173,24 @@ describe('настройки', () => {
   it('применяются сразу и сохраняются', async () => {
     const store = renderApp();
     go('#/settings');
-    fireEvent.click(screen.getAllByRole('button', { name: /Максимальный/ })[0]);
+    // По умолчанию спецвозможности выключены: обычный размер, обычная тема.
+    expect(document.documentElement.className).not.toMatch(/scale-/);
+    expect(screen.queryByRole('button', { name: /Максимальный/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /Тёмная/ }));
+    expect(document.documentElement.className).toMatch(/theme-dark/);
+
+    const aids = document.querySelector('[data-setting="visualAids"]') as HTMLElement;
+    fireEvent.click(within(aids).getByRole('button', { name: 'Да' }));
+    fireEvent.click(screen.getByRole('button', { name: /Максимальный/ }));
     expect(document.documentElement.className).toMatch(/scale-3/);
-    fireEvent.click(screen.getByRole('button', { name: /Высокий контраст/ }));
+    const contrast = document.querySelector('[data-setting="highContrast"]') as HTMLElement;
+    fireEvent.click(within(contrast).getByRole('button', { name: 'Да' }));
     expect(document.documentElement.className).toMatch(/theme-contrast/);
-    expect(JSON.parse(store.get('settings')!)).toMatchObject({ scale: 3, theme: 'contrast' });
+    expect(JSON.parse(store.get('settings')!)).toMatchObject({ visualAids: true, scale: 3, highContrast: true, theme: 'dark' });
+
+    // Выключили спецвозможности — размер и контраст сразу перестают действовать.
+    fireEvent.click(within(aids).getByRole('button', { name: /Нет/ }));
+    expect(document.documentElement.className).not.toMatch(/scale-|contrast/);
     click('Вернуть настройки по умолчанию');
     expect(document.documentElement.className).toMatch(/theme-light/);
   });
@@ -185,8 +198,8 @@ describe('настройки', () => {
   it('скрытие клавиатуры', async () => {
     renderApp();
     go('#/settings');
-    const section = screen.getByRole('heading', { name: 'Экранная клавиатура' }).parentElement!;
-    fireEvent.click(within(section).getByRole('button', { name: /Нет/ }));
+    const row = document.querySelector('[data-setting="showKeyboard"]') as HTMLElement;
+    fireEvent.click(within(row).getByRole('button', { name: /Нет/ }));
     go('#/puzzle/easy-0001');
     await screen.findByTestId('current-clue');
     expect(screen.queryByRole('group', { name: 'Экранная клавиатура' })).toBeNull();

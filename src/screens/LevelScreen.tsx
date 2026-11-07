@@ -5,6 +5,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '../components/Button.tsx';
 import { TopBar } from '../components/TopBar.tsx';
+import { Progress } from '../components/Progress.tsx';
 import { puzzleId } from '../core/generator.ts';
 import type { Difficulty } from '../core/types.ts';
 import { navigate } from '../router/router.ts';
@@ -19,6 +20,22 @@ function statusText(s: ProgressSummary | undefined): string {
   if (s.solved) return '√ Решён';
   if (s.solutionShown) return 'Показан ответ';
   return `Начат: ${s.percent}%`;
+}
+
+/** Строка статуса под номером: «чип» для решённых, полоска для начатых. */
+function Status({ s, accent }: { s: ProgressSummary | undefined; accent: string }) {
+  if (s?.solved) {
+    return <span className="inline-block bg-ok-soft text-ok text-sm font-semibold rounded-full px-3 py-0.5">{statusText(s)}</span>;
+  }
+  if (s && !s.solutionShown) {
+    return (
+      <span className="block w-full">
+        <span className="block text-sm font-normal text-muted mb-1">{statusText(s)}</span>
+        <Progress value={s.percent} color={accent} />
+      </span>
+    );
+  }
+  return <span className="block text-sm font-normal text-muted">{statusText(s)}</span>;
 }
 
 export interface LevelScreenProps {
@@ -65,17 +82,12 @@ export function LevelScreen({ level, page }: LevelScreenProps) {
       const id = puzzleId(level, i);
       const s = summaries.get(id);
       tiles.push(
-        <div key={id} className="w-1/2 sm:w-1/4 lg:w-1/5 p-1">
-          <Button
-            block
-            variant={s?.solved ? 'primary' : 'plain'}
-            onClick={() => navigate({ name: 'puzzle', id })}
-            guardKey={'tile-' + id}
-            className="flex-col py-3"
-            testId={'tile-' + id}
-          >
-            <span className="block text-2xl">№ {i}</span>
-            <span className="block text-base font-normal">{statusText(s)}</span>
+        <div key={id} className="w-1/2 sm:w-1/4 lg:w-1/5 p-1.5">
+          <Button block onClick={() => navigate({ name: 'puzzle', id })} guardKey={'tile-' + id} className="py-3" testId={'tile-' + id}>
+            <span className="block w-full">
+              <span className="block text-2xl font-bold mb-1">№ {i}</span>
+              <Status s={s} accent={LEVEL_INFO[level].accent} />
+            </span>
           </Button>
         </div>,
       );
@@ -94,13 +106,13 @@ export function LevelScreen({ level, page }: LevelScreenProps) {
         {count === null && !error && <p className="text-xl">Загрузка…</p>}
         {count !== null && (
           <>
-            <div className="mb-3">
-              <Button block onClick={randomUnsolved}>
+            <div className="mb-4">
+              <Button block variant="soft" onClick={randomUnsolved}>
                 Случайный нерешённый кроссворд
               </Button>
             </div>
-            <div className="flex flex-wrap -m-1">{tiles}</div>
-            <p className="text-xl font-bold text-center mt-4">
+            <div className="flex flex-wrap -m-1.5">{tiles}</div>
+            <p className="text-base text-muted font-semibold text-center mt-5">
               Страница {current} из {pages}
             </p>
             <nav className="flex -m-1 mt-1" aria-label="Страницы">

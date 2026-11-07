@@ -18,6 +18,7 @@ Firefox 52+, Safari 10+, Edge 15+, iOS 10+, Android 5+ (список — `browse
 | Backspace в старом Chrome = «Назад» в истории | На экране кроссворда `preventDefault()` для Backspace |
 | Workbox генерирует современный JS | Service Worker написан вручную на ES5 (`build/sw-template.js`) |
 | В шрифтах XP нет эмодзи и многих значков | Только символы набора WGL4; тест `scripts/glyphs.test.ts` |
+| На XP нет Segoe UI / Roboto | Стек шрифтов заканчивается на Arial (есть кириллица); со спецвозможностями — Verdana |
 | Нет `ResizeObserver`, `IntersectionObserver`, Pointer Events | Не используются; ESLint запрещает (`eslint.config.js`) |
 
 ## Запрещено

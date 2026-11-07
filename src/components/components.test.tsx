@@ -140,7 +140,8 @@ describe('CluePanel', () => {
     const on = { onHint: vi.fn(), onRevealLetter: vi.fn(), onPrevWord: vi.fn(), onNextWord: vi.fn(), onCheckWord: vi.fn(), onCheckAll: vi.fn() };
     const first = renderWithApp(<CluePanel grid={grid} state={play()} {...on} />);
     expect(screen.getByTestId('current-clue')).toHaveTextContent('Мурлыка');
-    expect(screen.getByText(/1 по горизонтали · 3 буквы/)).toBeInTheDocument();
+    expect(screen.getByText('1 по горизонтали')).toBeInTheDocument();
+    expect(screen.getByText('3 буквы')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Подсказка' }));
     fireEvent.click(screen.getByRole('button', { name: 'Открыть букву' }));
     fireEvent.click(screen.getByRole('button', { name: /Пред. слово/ }));

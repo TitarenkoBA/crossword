@@ -4,68 +4,90 @@
 
 /*
  * Темы. Цвета задаются переменными, Tailwind ссылается на них (tailwind.config.js).
- * CSS-переменные есть в Chrome 49, а вот `rgb(r g b / a)`, `color-mix` и т.п. — нет.
- * Контраст текста — не ниже 7:1 (WCAG AAA) для основного текста.
+ * CSS-переменные есть в Chrome 49, а вот `rgb(r g b / a)`, `color-mix` и т.п. — нет,
+ * поэтому полупрозрачные цвета пишем через rgba(r, g, b, a).
+ * Контраст основного текста — не ниже 7:1, второстепенного — не ниже 4.5:1.
  */
 :root,
 .theme-light {
-  --c-bg: #f3efe6;
+  --c-bg: #f4f5fa;
   --c-surface: #ffffff;
-  --c-text: #161616;
-  --c-muted: #474747;
-  --c-border: #3a3a3a;
-  --c-primary: #1a46c4;
+  --c-surface-2: #eceef6;
+  --c-text: #1e2333;
+  --c-muted: #535a6e;
+  --c-line: #dfe2ec;
+  --c-border: #a4abbd;
+  --c-primary: #4b45d6;
   --c-on-primary: #ffffff;
-  --c-secondary: #e4e8f2;
-  --c-on-secondary: #111111;
-  --c-danger: #a3121f;
+  --c-soft: #eceafd;
+  --c-on-soft: #2f2a9e;
+  --c-secondary: #ffffff;
+  --c-on-secondary: #1e2333;
+  --c-danger: #c42b2b;
   --c-on-danger: #ffffff;
-  --c-ok: #136b31;
-  --c-error: #a3121f;
+  --c-ok: #16794a;
+  --c-ok-soft: #e3f5eb;
+  --c-error: #c42b2b;
   --c-cell: #ffffff;
-  --c-cell-text: #111111;
-  --c-cell-word: #c9ddff;
-  --c-cell-active: #ffcf33;
-  --c-cell-active-text: #111111;
-  --c-focus: #000000;
+  --c-cell-text: #1e2333;
+  --c-cell-word: #e1defd;
+  --c-cell-active: #fcc93a;
+  --c-cell-active-text: #1e2333;
+  --c-focus: #4b45d6;
+  --shadow-card: 0 1px 2px rgba(30, 35, 51, 0.06), 0 6px 20px rgba(30, 35, 51, 0.06);
+  --shadow-raised: 0 1px 0 rgba(30, 35, 51, 0.12), 0 1px 3px rgba(30, 35, 51, 0.08);
+  --shadow-pop: 0 20px 50px rgba(15, 18, 30, 0.25);
 }
 
 .theme-dark {
-  --c-bg: #121212;
-  --c-surface: #1f1f1f;
-  --c-text: #f2f2f2;
-  --c-muted: #c4c4c4;
-  --c-border: #a8a8a8;
-  --c-primary: #8fb3ff;
-  --c-on-primary: #0b0b0b;
-  --c-secondary: #33384a;
-  --c-on-secondary: #f2f2f2;
-  --c-danger: #ff8a8a;
-  --c-on-danger: #0b0b0b;
-  --c-ok: #7ee2a0;
+  --c-bg: #11131c;
+  --c-surface: #1b1e2b;
+  --c-surface-2: #151823;
+  --c-text: #eef0f7;
+  --c-muted: #b2b8ca;
+  --c-line: #2c3142;
+  --c-border: #4b5268;
+  --c-primary: #8f8bff;
+  --c-on-primary: #12131c;
+  --c-soft: #2a2860;
+  --c-on-soft: #dcdbff;
+  --c-secondary: #252a3a;
+  --c-on-secondary: #eef0f7;
+  --c-danger: #ff8080;
+  --c-on-danger: #12131c;
+  --c-ok: #6ee0a6;
+  --c-ok-soft: #173327;
   --c-error: #ff8a8a;
-  --c-cell: #2b2b2b;
-  --c-cell-text: #ffffff;
-  --c-cell-word: #24427a;
-  --c-cell-active: #ffcf33;
-  --c-cell-active-text: #111111;
-  --c-focus: #ffffff;
+  --c-cell: #232838;
+  --c-cell-text: #f5f6fb;
+  --c-cell-word: #343177;
+  --c-cell-active: #fcc93a;
+  --c-cell-active-text: #12131c;
+  --c-focus: #b3b0ff;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.25);
+  --shadow-raised: 0 1px 0 rgba(0, 0, 0, 0.5);
+  --shadow-pop: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
-/* Высокий контраст: чёрный фон, жёлтый текст и рамки. */
+/* Высокий контраст (специальные возможности): чёрный фон, жёлтый текст и рамки, без теней. */
 .theme-contrast {
   --c-bg: #000000;
   --c-surface: #000000;
+  --c-surface-2: #000000;
   --c-text: #ffff00;
   --c-muted: #ffff00;
+  --c-line: #ffff00;
   --c-border: #ffff00;
   --c-primary: #ffff00;
   --c-on-primary: #000000;
+  --c-soft: #000000;
+  --c-on-soft: #ffff00;
   --c-secondary: #000000;
   --c-on-secondary: #ffff00;
   --c-danger: #ffffff;
   --c-on-danger: #000000;
   --c-ok: #00ff66;
+  --c-ok-soft: #000000;
   --c-error: #ff6b6b;
   --c-cell: #000000;
   --c-cell-text: #ffffff;
@@ -73,10 +95,20 @@
   --c-cell-active: #ffff00;
   --c-cell-active-text: #000000;
   --c-focus: #00ffff;
+  --shadow-card: none;
+  --shadow-raised: none;
+  --shadow-pop: none;
+}
+.theme-contrast .btn,
+.theme-contrast .card,
+.theme-contrast .kb-key {
+  border-width: 2px;
+  border-color: var(--c-border);
 }
 
 /*
- * Размер интерфейса: всё в rem, поэтому достаточно поменять размер шрифта у <html>.
+ * Размер интерфейса (специальные возможности): всё в rem, поэтому достаточно
+ * поменять размер шрифта у <html>.
  */
 html {
   font-size: 16px;
@@ -90,11 +122,19 @@ html.scale-2 {
 html.scale-3 {
   font-size: 28px;
 }
+/* При крупном тексте и контрасте — более разборчивый шрифт. */
+html.scale-1 body,
+html.scale-2 body,
+html.scale-3 body,
+html.theme-contrast body {
+  font-family: Verdana, Tahoma, Arial, sans-serif;
+}
 
 body {
   background-color: var(--c-bg);
   color: var(--c-text);
-  line-height: 1.4;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
   /* Запрещаем выделение текста случайным протягиванием мыши. */
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -118,9 +158,50 @@ button:disabled {
   cursor: default;
 }
 
-/* Затемнение под окном подтверждения (rgba, а не rgb(… / …) — для Chrome 49). */
+/* Поверхности. */
+.card {
+  background-color: var(--c-surface);
+  border: 1px solid var(--c-line);
+  box-shadow: var(--shadow-card);
+}
+.shadow-bar {
+  box-shadow: 0 1px 3px rgba(30, 35, 51, 0.05);
+}
+.shadow-pop {
+  box-shadow: var(--shadow-pop);
+}
+
+/* Кнопки: мягкое затемнение при наведении и «нажатие». */
+.btn {
+  -webkit-transition: background-color 0.15s, border-color 0.15s;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.btn:hover:enabled {
+  background-image: linear-gradient(rgba(30, 35, 51, 0.06), rgba(30, 35, 51, 0.06));
+}
+.btn:active:enabled {
+  background-image: linear-gradient(rgba(30, 35, 51, 0.12), rgba(30, 35, 51, 0.12));
+}
+.btn-raised {
+  box-shadow: var(--shadow-raised);
+}
+
+/* Затемнение под окном (rgba, а не rgb(… / …) — для Chrome 49). */
 .dialog-backdrop {
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(15, 18, 30, 0.55);
+}
+
+/* Полоска прогресса. */
+.progress {
+  height: 0.5rem;
+  border-radius: 999px;
+  background-color: var(--c-surface-2);
+  overflow: hidden;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
 }
 
 /* Клетка кроссворда. */
@@ -132,13 +213,19 @@ button:disabled {
   outline: 3px dashed var(--c-focus);
   outline-offset: -6px;
 }
-
-/* Клавиши экранной клавиатуры: при наведении — заметная подсветка. */
-.kb-key:hover:enabled,
 .grid-cell:hover {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08));
+  background-image: linear-gradient(rgba(75, 69, 214, 0.1), rgba(75, 69, 214, 0.1));
+}
+
+/* Клавиши экранной клавиатуры. */
+.kb-key {
+  box-shadow: var(--shadow-raised);
+}
+.kb-key:hover:enabled {
+  background-image: linear-gradient(rgba(75, 69, 214, 0.1), rgba(75, 69, 214, 0.1));
 }
 .kb-key:active:enabled {
   background-color: var(--c-cell-active);
   color: var(--c-cell-active-text);
+  box-shadow: none;
 }

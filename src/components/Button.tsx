@@ -11,13 +11,19 @@
 import type { ReactNode } from 'react';
 import { useApp } from '../state/AppContext.tsx';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'plain';
+/**
+ * primary — главное действие; secondary — обычная белая кнопка;
+ * soft — второстепенное действие (мягкий акцентный фон); ghost — без фона (верхняя строка);
+ * danger — опасное действие.
+ */
+export type ButtonVariant = 'primary' | 'secondary' | 'soft' | 'ghost' | 'danger';
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-on-primary border-primary',
-  secondary: 'bg-secondary text-on-secondary border-line',
-  danger: 'bg-danger text-on-danger border-danger',
-  plain: 'bg-surface text-text border-line',
+  primary: 'bg-primary text-on-primary border-primary btn-raised',
+  secondary: 'bg-secondary text-on-secondary border-line btn-raised',
+  soft: 'bg-soft text-on-soft border-soft',
+  ghost: 'bg-transparent text-text border-transparent',
+  danger: 'bg-danger text-on-danger border-danger btn-raised',
 };
 
 export interface ButtonProps {
@@ -59,9 +65,9 @@ export function Button({
     <button
       type="button"
       className={
-        'inline-flex items-center justify-center min-h-target min-w-target py-2 rounded-lg border-2 ' +
-        'font-bold text-center leading-tight ' +
-        (large ? 'text-xl py-3 px-4 ' : small ? 'text-base px-2 ' : 'text-lg px-4 ') +
+        'btn inline-flex items-center justify-center min-h-target min-w-target py-2 rounded-xl border ' +
+        'font-semibold text-center leading-tight ' +
+        (large ? 'text-lg py-3 px-5 ' : small ? 'text-sm px-2 ' : 'text-base px-4 ') +
         (block ? 'w-full ' : '') +
         (disabled ? 'opacity-50 ' : '') +
         VARIANTS[variant] +
