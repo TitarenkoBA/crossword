@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Темы. Цвета задаются переменными, Tailwind ссылается на них (tailwind.config.js).
+ * CSS-переменные есть в Chrome 49, а вот `rgb(r g b / a)`, `color-mix` и т.п. — нет.
+ * Контраст текста — не ниже 7:1 (WCAG AAA) для основного текста.
+ */
+:root,
+.theme-light {
+  --c-bg: #f3efe6;
+  --c-surface: #ffffff;
+  --c-text: #161616;
+  --c-muted: #474747;
+  --c-border: #3a3a3a;
+  --c-primary: #1a46c4;
+  --c-on-primary: #ffffff;
+  --c-secondary: #e4e8f2;
+  --c-on-secondary: #111111;
+  --c-danger: #a3121f;
+  --c-on-danger: #ffffff;
+  --c-ok: #136b31;
+  --c-error: #a3121f;
+  --c-cell: #ffffff;
+  --c-cell-text: #111111;
+  --c-cell-word: #c9ddff;
+  --c-cell-active: #ffcf33;
+  --c-cell-active-text: #111111;
+  --c-focus: #000000;
+}
+
+.theme-dark {
+  --c-bg: #121212;
+  --c-surface: #1f1f1f;
+  --c-text: #f2f2f2;
+  --c-muted: #c4c4c4;
+  --c-border: #a8a8a8;
+  --c-primary: #8fb3ff;
+  --c-on-primary: #0b0b0b;
+  --c-secondary: #33384a;
+  --c-on-secondary: #f2f2f2;
+  --c-danger: #ff8a8a;
+  --c-on-danger: #0b0b0b;
+  --c-ok: #7ee2a0;
+  --c-error: #ff8a8a;
+  --c-cell: #2b2b2b;
+  --c-cell-text: #ffffff;
+  --c-cell-word: #24427a;
+  --c-cell-active: #ffcf33;
+  --c-cell-active-text: #111111;
+  --c-focus: #ffffff;
+}
+
+/* Высокий контраст: чёрный фон, жёлтый текст и рамки. */
+.theme-contrast {
+  --c-bg: #000000;
+  --c-surface: #000000;
+  --c-text: #ffff00;
+  --c-muted: #ffff00;
+  --c-border: #ffff00;
+  --c-primary: #ffff00;
+  --c-on-primary: #000000;
+  --c-secondary: #000000;
+  --c-on-secondary: #ffff00;
+  --c-danger: #ffffff;
+  --c-on-danger: #000000;
+  --c-ok: #00ff66;
+  --c-error: #ff6b6b;
+  --c-cell: #000000;
+  --c-cell-text: #ffffff;
+  --c-cell-word: #003a8c;
+  --c-cell-active: #ffff00;
+  --c-cell-active-text: #000000;
+  --c-focus: #00ffff;
+}
+
+/*
+ * Размер интерфейса: всё в rem, поэтому достаточно поменять размер шрифта у <html>.
+ */
+html {
+  font-size: 16px;
+}
+html.scale-1 {
+  font-size: 20px;
+}
+html.scale-2 {
+  font-size: 24px;
+}
+html.scale-3 {
+  font-size: 28px;
+}
+
+body {
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  line-height: 1.4;
+  /* Запрещаем выделение текста случайным протягиванием мыши. */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Видимый фокус. Используем :focus, а не :focus-visible (его нет в Chrome 49). */
+button:focus,
+a:focus,
+[tabindex]:focus {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+}

@@ -1,0 +1,64 @@
+{
+  "name": "crossword",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Кроссворды на русском языке: PWA, удобная для работы только мышью, совместимая с Chrome 49 (Windows XP).",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "generate": "node scripts/generate.ts",
+    "validate-data": "node scripts/validate-data.ts",
+    "check-compat": "node scripts/check-compat.ts",
+    "check": "npm run typecheck && npm run lint && npm run test && npm run validate-data && npm run build && npm run check-compat"
+  },
+  "browserslist": [
+    "chrome >= 49",
+    "firefox >= 52",
+    "safari >= 10",
+    "edge >= 15",
+    "ios >= 10",
+    "android >= 5"
+  ],
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@types/node": "^26.6.6",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-legacy": "^8.2.4",
+    "@vitejs/plugin-react": "^6.2.1",
+    "@vitest/coverage-v8": "^5.1.0",
+    "autoprefixer": "^10.6.2",
+    "es-check": "^9.8.1",
+    "eslint": "^10.14.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
+    "jsdom": "^31.0.0",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^3.4.19",
+    "terser": "^5.51.2",
+    "typescript": "~5.9",
+    "typescript-eslint": "^8.72.1",
+    "vite": "^8.3.6",
+    "vitest": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

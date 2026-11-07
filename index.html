@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Кроссворды на русском языке. Бесплатно, без регистрации и рекламы. Удобно разгадывать одной мышью." />
+    <meta name="theme-color" content="#1d4ed8" />
+    <title>Кроссворды</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <p style="font: 20px Verdana, sans-serif; padding: 24px">
+        Для работы кроссвордов нужно включить JavaScript в настройках браузера.
+      </p>
+    </noscript>
+    <script>
+      // Только ES3: этот код должен выполниться в любом браузере.
+      // Если приложение не запустилось за 20 секунд — показываем понятное сообщение.
+      setTimeout(function () {
+        if (window.__crosswordStarted) return;
+        var root = document.getElementById('root');
+        if (!root || root.children.length) return;
+        root.innerHTML =
+          '<p style="font: 20px Verdana, sans-serif; padding: 24px; line-height: 1.5">' +
+          'Не получилось запустить кроссворды.<br>' +
+          'Попробуйте обновить страницу (кнопка F5).<br>' +
+          'Если не помогает — возможно, браузер слишком старый. Подойдёт Google Chrome версии 49 или новее.' +
+          '</p>';
+      }, 20000);
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
