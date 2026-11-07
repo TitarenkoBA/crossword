@@ -62,3 +62,29 @@ export function checkCss(css: string, name: string): string[] {
   }
   return problems;
 }
+
+/**
+ * Символы, которые точно есть в стандартных шрифтах Windows XP
+ * (набор WGL4: Arial, Verdana, Tahoma). Эмодзи и многие значки (✓, ✕, ⌫)
+ * там отображаются квадратиками.
+ */
+const WGL4_RANGES: [number, number][] = [
+  [0x20, 0x7e], [0xa0, 0x17f], [0x384, 0x3ce], [0x400, 0x45f], [0x490, 0x491],
+  [0x2013, 0x2015], [0x2017, 0x201e], [0x2020, 0x2022], [0x2026, 0x2026], [0x2030, 0x2030],
+  [0x2032, 0x2033], [0x2039, 0x203a], [0x203c, 0x203c], [0x20ac, 0x20ac], [0x2116, 0x2116],
+  [0x2122, 0x2122], [0x2190, 0x2195], [0x2212, 0x2212], [0x2219, 0x221a], [0x221e, 0x221e],
+  [0x2248, 0x2248], [0x2260, 0x2261], [0x2264, 0x2265], [0x25a0, 0x25a1], [0x25b2, 0x25b2],
+  [0x25ba, 0x25ba], [0x25bc, 0x25bc], [0x25c4, 0x25c4], [0x25cb, 0x25cb], [0x25cf, 0x25cf],
+  [0x263a, 0x263c], [0x2660, 0x2666],
+];
+
+/** Возвращает символы текста, которых нет в WGL4 (перевод строки и табуляция допустимы). */
+export function nonWgl4Chars(text: string): string[] {
+  const bad = new Set<string>();
+  for (const ch of text) {
+    const code = ch.codePointAt(0)!;
+    if (code === 0x0a || code === 0x0d || code === 0x09) continue;
+    if (!WGL4_RANGES.some(([a, b]) => code >= a && code <= b)) bad.add(ch);
+  }
+  return [...bad];
+}

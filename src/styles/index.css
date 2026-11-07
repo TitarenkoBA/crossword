@@ -117,3 +117,28 @@ button {
 button:disabled {
   cursor: default;
 }
+
+/* Затемнение под окном подтверждения (rgba, а не rgb(… / …) — для Chrome 49). */
+.dialog-backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Клетка кроссворда. */
+.grid-cell {
+  border-color: var(--c-border);
+  cursor: pointer;
+}
+.grid-cell:focus {
+  outline: 3px dashed var(--c-focus);
+  outline-offset: -6px;
+}
+
+/* Клавиши экранной клавиатуры: при наведении — заметная подсветка. */
+.kb-key:hover:enabled,
+.grid-cell:hover {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08));
+}
+.kb-key:active:enabled {
+  background-color: var(--c-cell-active);
+  color: var(--c-cell-active-text);
+}
