@@ -33,6 +33,17 @@ export interface ParseResult {
 export const MIN_WORD_LENGTH = 3;
 export const MAX_WORD_LENGTH = 15;
 
+/** Текст содержит слово, начинающееся с ответа (например, «лесной» для ЛЕС)? */
+export function givesAway(text: string, word: string): boolean {
+  const t = normalizeWord(text);
+  let i = t.indexOf(word);
+  while (i !== -1) {
+    if (i === 0 || ALPHABET.indexOf(t[i - 1]) === -1) return true;
+    i = t.indexOf(word, i + 1);
+  }
+  return false;
+}
+
 export function parseDictionary(text: string, topic: string): ParseResult {
   const entries: DictEntry[] = [];
   const errors: string[] = [];
@@ -64,8 +75,8 @@ export function parseDictionary(text: string, topic: string): ParseResult {
       errors.push(`${where}: у слова «${word}» нет вопроса или подсказки`);
       return;
     }
-    if (clue.toUpperCase().replace(/Ё/g, 'Е').indexOf(word) !== -1) {
-      errors.push(`${where}: вопрос к слову «${word}» содержит само слово`);
+    if (givesAway(clue, word) || givesAway(hint, word)) {
+      errors.push(`${where}: вопрос или подсказка к слову «${word}» содержит само слово`);
       return;
     }
     entries.push({ word, level, clue, hint, topic });

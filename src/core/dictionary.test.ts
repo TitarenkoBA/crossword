@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mergeDictionaries, parseDictionary } from './dictionary.ts';
+import { givesAway, mergeDictionaries, parseDictionary } from './dictionary.ts';
 
 describe('parseDictionary', () => {
   it('читает строки, пропуская комментарии и пустые', () => {
@@ -19,11 +19,21 @@ describe('parseDictionary', () => {
     ['КОТ | 4 | Мурлыка | п', /уровень/],
     ['КОТ | 1 |  | п', /нет вопроса/],
     ['КОТ | 1 | Кот учёный | п', /содержит само слово/],
+    ['ЛЕС | 1 | Там грибы | Лесной массив', /содержит само слово/],
   ])('ошибка для «%s»', (line, re) => {
     const r = parseDictionary(line, 't');
     expect(r.entries).toEqual([]);
     expect(r.errors[0]).toMatch(re);
     expect(r.errors[0]).toMatch(/^t:1:/);
+  });
+});
+
+describe('givesAway', () => {
+  it('находит ответ только в начале слова', () => {
+    expect(givesAway('Полосатая и жалит', 'ОСА')).toBe(false);
+    expect(givesAway('Оса жалит', 'ОСА')).toBe(true);
+    expect(givesAway('напиток из винограда', 'ВИНО')).toBe(true);
+    expect(givesAway('Зелёная ёлка', 'ЕЛКА')).toBe(true);
   });
 });
 
