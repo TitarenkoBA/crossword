@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './App.tsx';
 import { registerServiceWorker } from './pwa/register.ts';
+import { listenForInstallPrompt } from './pwa/install.ts';
 import './styles/index.css';
 
 declare global {
@@ -11,6 +12,9 @@ declare global {
 }
 
 window.__crosswordStarted = true;
+
+// Ловим предложение установки как можно раньше, до отрисовки приложения.
+listenForInstallPrompt();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

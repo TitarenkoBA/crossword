@@ -11,6 +11,7 @@ import { parsePuzzleId } from '../data/loader.ts';
 import { navigate } from '../router/router.ts';
 import { useApp } from '../state/AppContext.tsx';
 import { loadLastPuzzle, progressSummaries } from '../storage/storage.ts';
+import { InstallPrompt } from '../pwa/InstallPrompt.tsx';
 
 /** Маленький логотип — фрагмент кроссворда из клеток. */
 function Logo() {
@@ -143,6 +144,7 @@ export function HomeScreen() {
           </Button>
         </div>
       </div>
+      <InstallPrompt />
     </main>
   );
 }

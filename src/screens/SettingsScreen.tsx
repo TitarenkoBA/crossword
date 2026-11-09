@@ -22,6 +22,7 @@ import {
   type Theme,
 } from '../state/settings.ts';
 import { clearAllProgress } from '../storage/storage.ts';
+import { InstallButton, useInstallAvailable } from '../pwa/InstallPrompt.tsx';
 
 function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
@@ -117,6 +118,7 @@ const FLAGS: { key: Flag; title: string; hint: string }[] = [
 
 export function SettingsScreen() {
   const { settings, updateSettings, store, loader } = useApp();
+  const installAvailable = useInstallAvailable();
   const [confirm, setConfirm] = useState<0 | 1 | 2>(0);
   const [cleared, setCleared] = useState(false);
   const [download, setDownload] = useState<{ done: number; total: number; error?: boolean } | null>(null);
@@ -134,6 +136,12 @@ export function SettingsScreen() {
     <div>
       <TopBar title="Настройки" backLabel="← Назад" onBack={goBack} />
       <main className="max-w-3xl mx-auto px-4 py-6">
+        {installAvailable && (
+          <Section title="Приложение" hint="Установите кроссворды как приложение: значок на рабочем столе, отдельное окно, работа без интернета.">
+            <InstallButton />
+          </Section>
+        )}
+
         <Section title="Оформление">
           <Choices
             name="theme"
