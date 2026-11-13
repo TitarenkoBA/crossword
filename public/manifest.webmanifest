@@ -3,7 +3,7 @@
   "short_name": "Кроссворды",
   "description": "Кроссворды на русском языке. Бесплатно, без регистрации и рекламы.",
   "lang": "ru",
-  "id": "./",
+  "id": "/crossword/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
